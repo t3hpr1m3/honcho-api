@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+  app:
+    environment:
+      - MIX_ENV=test
+      - DB_NAME=honcho-test
+  db:
+    environment:
+      - MYSQL_DATABASE=honcho-test
