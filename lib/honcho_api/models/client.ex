@@ -13,12 +13,12 @@ defmodule HonchoApi.Client do
     timestamps(usec: false)
   end
 
-  @fields ~w(name address1 address2 city state zip)a
   @required_fields ~w(name address1 city state zip)a
+  @optional_fields ~w(address2)
 
   def changeset(data, params \\ %{}) do
     data
-    |> cast(params, @fields)
+    |> cast(params, @optional_fields ++ @required_fields)
     |> validate_required(@required_fields)
   end
 end
