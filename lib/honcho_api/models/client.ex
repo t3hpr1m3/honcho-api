@@ -20,5 +20,6 @@ defmodule HonchoApi.Client do
     data
     |> cast(params, @optional_fields ++ @required_fields)
     |> validate_required(@required_fields)
+    |> validate_format(:zip, ~r/\d{5}/)
   end
 end
