@@ -26,4 +26,21 @@ defmodule HonchoApi.Routes.Clients do
         |> render("error", %{changeset: changeset})
     end
   end
+
+  put "/:id" do
+    client = Repo.get!(Client, id)
+    changeset = Client.changeset(client, conn.params)
+    case Repo.update(changeset) do
+      {:ok, client} ->
+        render(conn, "show", %{client: client})
+      {:error, changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render("error", %{changeset: changeset})
+    end
+  end
+
+  match _ do
+    send_resp(conn, 404, Poison.encode!(%{error: "Not Found"}))
+  end
 end

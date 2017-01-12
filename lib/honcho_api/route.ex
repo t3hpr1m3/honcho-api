@@ -17,11 +17,11 @@ defmodule HonchoApi.Route do
 
       def view_module() do
         __MODULE__
-          |> to_string
-          |> String.split(".")
-          |> List.last
-          |> Kernel.<>("View")
-          |> view_module()
+        |> to_string
+        |> String.split(".")
+        |> List.last
+        |> Kernel.<>("View")
+        |> view_module
       end
 
       def view_module(mod) do

@@ -91,4 +91,53 @@ defmodule HonchoApi.Routes.ClientsTest do
       assert match?(%{"errors" => _}, json_response(context.conn))
     end
   end
+
+  describe "PUT / when update succeeds" do
+    setup context do
+      client_params = %{name: "New Name"}
+      client = insert(:client, name: "Old Name")
+
+      conn = put context.conn, "/api/clients/#{client.id}", client_params
+
+      [client: client, client_params: client_params, conn: conn]
+    end
+
+    test "responds with 200 (ok)", context do
+      assert context.conn.status == Plug.Conn.Status.code(:ok)
+    end
+
+    test "updates the client", context do
+      client2 = HonchoApi.Repo.get!(HonchoApi.Client, context.client.id)
+      assert client2.name == "New Name"
+    end
+
+    test "renders the updated client", context do
+      client2 = HonchoApi.Repo.get!(HonchoApi.Client, context.client.id)
+      assert json_response(context.conn) == render_json(ClientsView, "show", %{client: client2})
+    end
+  end
+
+  describe "PUT / when update fails" do
+    setup context do
+      client_params = %{name: ""}
+      client = insert(:client, name: "Old Name")
+
+      conn = put context.conn, "/api/clients/#{client.id}", client_params
+
+      [client: client, client_params: client_params, conn: conn]
+    end
+
+    test "responds with 422 (unprocessable entity)", context do
+      assert context.conn.status == Plug.Conn.Status.code(:unprocessable_entity)
+    end
+
+    test "does not update the client", context do
+      client2 = HonchoApi.Repo.get!(HonchoApi.Client, context.client.id)
+      assert client2.name == "Old Name"
+    end
+
+    test "renders an error", context do
+      assert match?(%{"errors" => _}, json_response(context.conn))
+    end
+  end
 end
