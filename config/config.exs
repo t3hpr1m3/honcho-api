@@ -30,3 +30,7 @@ use Mix.Config
 #     import_config "#{Mix.env}.exs"
 config :honcho_api,
   port: System.get_env("PORT") || "${PORT}"
+
+config :honcho_api, :ecto_repos, [HonchoApi.Repo]
+
+import_config "#{Mix.env}.exs"

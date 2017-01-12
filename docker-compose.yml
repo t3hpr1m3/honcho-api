@@ -1,23 +1,15 @@
 version: '2'
 services:
   app:
-    build: .
-    volumes:
-      - .:/usr/src/app
-    ports:
-      - "4000"
+    extends:
+      file: docker-compose.common.yml
+      service: app
     links:
       - db
     environment:
-      - DB_USER=honcho
-      - DB_PASSWORD=honcho
-      - DB_NAME=honcho
       - DB_HOST=db
 
   db:
-    image: mariadb:10
-    environment:
-      - MYSQL_ROOT_PASSWORD=f00b4r
-      - MYSQL_USER=honcho
-      - MYSQL_PASSWORD=honcho
-      - MYSQL_DATABASE=honcho
+    extends:
+      file: docker-compose.common.yml
+      service: db

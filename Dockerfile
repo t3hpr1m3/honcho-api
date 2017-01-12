@@ -21,6 +21,8 @@ RUN mix deps.compile
 
 COPY . /usr/src/app
 
+RUN mix compile
+
 ENV RELX_REPLACE_OS_VARS true
 ENV PORT 4000
 EXPOSE 4000

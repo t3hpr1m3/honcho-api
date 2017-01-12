@@ -1,5 +1,6 @@
 defmodule HonchoApi do
   use Application
+  import Supervisor.Spec, warn: false
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
   # for more information on OTP Applications
@@ -12,7 +13,8 @@ defmodule HonchoApi do
     children = [
       # Starts a worker by calling: HonchoApi.Worker.start_link(arg1, arg2, arg3)
       # worker(HonchoApi.Worker, [arg1, arg2, arg3]),
-      Plug.Adapters.Cowboy.child_spec(:http, HonchoApi.Router, [], [port: port])
+      Plug.Adapters.Cowboy.child_spec(:http, HonchoApi.Router, [], [port: port]),
+      supervisor(HonchoApi.Repo, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

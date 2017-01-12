@@ -2,9 +2,18 @@ version: '2'
 
 services:
   app:
+    extends:
+      file: docker-compose.common.yml
+      service: app
+    links:
+      - testdb
     environment:
       - MIX_ENV=test
-      - DB_NAME=honcho-test
-  db:
+      - DB_NAME=honcho_test
+      - DB_HOST=testdb
+  testdb:
+    extends:
+      file: docker-compose.common.yml
+      service: db
     environment:
-      - MYSQL_DATABASE=honcho-test
+      - MYSQL_DATABASE=honcho_test
