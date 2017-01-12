@@ -23,22 +23,18 @@ defmodule HonchoApi.ConnTest do
         Plug.Adapters.Test.Conn.conn(unquote(conn), unquote(method),
                                      unquote(path_or_action),
                                      unquote(params_or_body))
+          |> Plug.Conn.put_req_header("content-type", "application/json")
           |> HonchoApi.Router.call([])
       end
     end
   end
 
-  def json_response(%Plug.Conn{status: status, resp_body: body}, given) do
-    given = Plug.Conn.Status.code(given)
-    if given == status do
-      case Poison.decode(body) do
-        {:ok, body} ->
-          body
-        {:error, {:invalid, token}} ->
-          raise "could not decode JSON body, invalid token #{inspect token} in body:\n\n#{body}"
-      end
-    else
-      raise "expected response with status #{given}, got: #{status}, with body:\n#{body}"
+  def json_response(%Plug.Conn{resp_body: body}) do
+    case Poison.decode(body) do
+      {:ok, body} ->
+        body
+      {:error, {:invalid, token}} ->
+        raise "could not decode JSON body, invalid token #{inspect token} in body:\n\n#{body}"
     end
   end
 end

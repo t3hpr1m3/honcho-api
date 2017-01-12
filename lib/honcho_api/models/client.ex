@@ -1,6 +1,7 @@
 defmodule HonchoApi.Client do
   use Ecto.Schema
   import Ecto.Changeset
+  import Ecto.Queryable
 
   schema "clients" do
     field :name
