@@ -10,17 +10,21 @@ defmodule HonchoApi.Route do
         pass: ["application/json"],
         json_decoder: Poison
 
-      def render(conn, template, data, status \\ 200) do
+      def render(conn, template, data \\ nil) do
         body = view_module.render(template, data) |> Poison.encode!
-        conn |> send_resp(status, body)
+        conn |> send_resp(conn.status || :ok, body)
       end
 
       def view_module() do
-        mod = __MODULE__
+        __MODULE__
           |> to_string
           |> String.split(".")
           |> List.last
           |> Kernel.<>("View")
+          |> view_module()
+      end
+
+      def view_module(mod) do
         Module.concat(HonchoApi.Views, mod)
       end
     end

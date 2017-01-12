@@ -1,26 +1,29 @@
 defmodule HonchoApi.Routes.Clients do
   use HonchoApi.Route
   alias HonchoApi.Client
+  alias HonchoApi.Repo
 
   get "/" do
-    clients = HonchoApi.Repo.all(Client)
+    clients = Repo.all(Client)
     render(conn, "index", %{clients: clients})
   end
 
   get "/:id" do
-    client = HonchoApi.Repo.get!(Client, id)
+    client = Repo.get!(Client, id)
     render(conn, "show", %{client: client})
   end
 
   post "/" do
     changeset = Client.changeset(%Client{}, conn.params)
-    case HonchoApi.Repo.insert(changeset) do
+    case Repo.insert(changeset) do
       {:ok, client} ->
         conn
-        |> render("show", %{client: client}, 201)
+        |> put_status(:created)
+        |> render("show", %{client: client})
       {:error, changeset} ->
         conn
-        |> render("error", %{changeset: changeset}, :unprocessable_entity)
+        |> put_status(:unprocessable_entity)
+        |> render("error", %{changeset: changeset})
     end
   end
 end

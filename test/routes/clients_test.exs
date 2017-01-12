@@ -3,7 +3,7 @@ defmodule HonchoApi.Routes.ClientsTest do
   alias HonchoApi.Views.ClientsView
   import HonchoApi.Factory
 
-  setup context do
+  setup do
     [conn: build_conn()]
   end
 
@@ -88,8 +88,6 @@ defmodule HonchoApi.Routes.ClientsTest do
     end
 
     test "renders an error", context do
-      client = HonchoApi.Repo.one(HonchoApi.Client)
-
       assert match?(%{"errors" => _}, json_response(context.conn))
     end
   end
