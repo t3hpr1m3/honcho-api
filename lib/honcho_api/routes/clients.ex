@@ -4,6 +4,11 @@ defmodule HonchoApi.Routes.Clients do
 
   get "/" do
     clients = HonchoApi.Repo.all(Client)
-    render(conn, "index.json", %{ clients: clients })
+    render(conn, "index", %{clients: clients})
+  end
+
+  get "/:id" do
+    client = HonchoApi.Repo.get!(Client, id)
+    render(conn, "show", %{client: client})
   end
 end
