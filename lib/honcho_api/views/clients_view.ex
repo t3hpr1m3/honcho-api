@@ -1,4 +1,6 @@
 defmodule HonchoApi.Views.ClientsView do
+  use HonchoApi.View
+
   def render("index", %{clients: clients}) do
     %{clients: Enum.map(clients, &client_json/1)}
   end

@@ -45,7 +45,7 @@ defmodule HonchoApi.Routes.ClientsTest do
     end
   end
 
-  describe "POST /" do
+  describe "POST / when creation succeeds" do
 
     setup context do
       client_params = params_for(:client)
@@ -67,6 +67,30 @@ defmodule HonchoApi.Routes.ClientsTest do
       client = HonchoApi.Repo.one(HonchoApi.Client)
 
       assert json_response(context.conn) == render_json(ClientsView, "show", %{client: client})
+    end
+  end
+
+  describe "POST / when creation fails" do
+    setup context do
+      client_params = params_for(:client, name: "")
+
+      conn = post context.conn, "/api/clients/", client_params
+
+      [client_params: client_params, conn: conn]
+    end
+
+    test "responds with 422 (unprocessable entity)", context do
+      assert context.conn.status == Plug.Conn.Status.code(:unprocessable_entity)
+    end
+
+    test "does not create a client" do
+      assert HonchoApi.Repo.aggregate(HonchoApi.Client, :count, :id) == 0
+    end
+
+    test "renders an error", context do
+      client = HonchoApi.Repo.one(HonchoApi.Client)
+
+      assert match?(%{"errors" => _}, json_response(context.conn))
     end
   end
 end

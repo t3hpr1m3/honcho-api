@@ -18,6 +18,9 @@ defmodule HonchoApi.Routes.Clients do
       {:ok, client} ->
         conn
         |> render("show", %{client: client}, 201)
+      {:error, changeset} ->
+        conn
+        |> render("error", %{changeset: changeset}, :unprocessable_entity)
     end
   end
 end
